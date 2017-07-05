@@ -1,3 +1,3 @@
-com/realife/services/realife_services/base/Application.class
-com/realife/services/realife_services/base/BaseController.class
-com/realife/services/realife_services/controlleres/UsersController.class
+com/realife/services/base/Application.class
+com/realife/services/base/BaseController.class
+com/realife/services/controlleres/UsersController.class
