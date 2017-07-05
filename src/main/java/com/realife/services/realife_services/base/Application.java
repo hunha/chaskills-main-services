@@ -1,14 +1,18 @@
 package com.realife.services.realife_services.base;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
 
-@EnableAutoConfiguration
+@SpringBootApplication
+@EnableDiscoveryClient
+@ComponentScan(basePackages = { "com.realife.services.realife_services.controlleres" })
 public class Application {
 	
 	public static void main(String[] args) {
-		// Will configure using users-server.yml
-		System.setProperty("spring.config.name", "users-server");
+		// Will configure using main-services.yml
+//		System.setProperty("spring.config.name", "main-services");
 		
 		SpringApplication.run(Application.class, args);
 	}
