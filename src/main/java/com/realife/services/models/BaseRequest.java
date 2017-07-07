@@ -1,5 +1,5 @@
 package com.realife.services.models;
 
-public class BaseModel {
+public class BaseRequest {
 	
 }

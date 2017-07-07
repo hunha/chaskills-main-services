@@ -1,7 +1,20 @@
 # Spring properties
 spring:
   application:
-     name: main-service
+    name: main-service
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: com.realife.services.configurations.RealNamingStrategyImpl
+  datasource:
+    url: jdbc:mysql://localhost/realife_development
+    username: root
+    password: sa123..
+    driver-class-name: com.mysql.jdbc.Driver
 
 # Discovery Server Access
 eureka:
