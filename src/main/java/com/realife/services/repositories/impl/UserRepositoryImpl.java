@@ -1,5 +1,7 @@
 package com.realife.services.repositories.impl;
 
-public class UserRepositoryImpl {
+import com.realife.services.domains.User;
+
+public class UserRepositoryImpl extends BaseRepositoryImpl<User> {
 	
 }

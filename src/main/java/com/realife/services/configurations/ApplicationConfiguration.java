@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 @Configuration
 @EntityScan("com.realife.services.domains")
@@ -22,6 +23,9 @@ public class ApplicationConfiguration {
 	
 	@Bean
 	public ObjectMapper objectMapper() {
-		return new ObjectMapper();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setDateFormat(new ISO8601DateFormat());
+		return mapper;
 	}
 }
