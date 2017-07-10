@@ -10,25 +10,25 @@ import org.springframework.data.jpa.domain.Specification;
 public class SearchSpecification<T> implements Specification<T> {
 
 	private SearchCriteria criteria;
-	
+
 	public SearchSpecification(SearchCriteria criteria) {
 		this.criteria = criteria;
 	}
 
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-		if (criteria.getOperation().equalsIgnoreCase(">")) {
+		if (criteria.getOperation().equals(SearchOperation.GreaterThanOrEqualTo)) {
 			return cb.greaterThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
-		} else if (criteria.getOperation().equalsIgnoreCase("<")) {
+		} else if (criteria.getOperation().equals(SearchOperation.LessThanOrEqualTo)) {
 			return cb.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
-		} else if (criteria.getOperation().equalsIgnoreCase(":")) {
+		} else if (criteria.getOperation().equals(SearchOperation.EqualOrLike)) {
 			if (root.get(criteria.getKey()).getJavaType() == String.class) {
 				return cb.like(root.<String>get(criteria.getKey()), "%" + criteria.getValue() + "%");
 			} else {
 				return cb.equal(root.get(criteria.getKey()), criteria.getValue());
 			}
 		}
-		
+
 		return null;
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.realife.services.domains.User;
 import com.realife.services.repositories.UserRepository;
+import com.realife.services.repositories.specs.SearchOperation;
 import com.realife.services.repositories.specs.SearchSpecificationBuilder;
 import com.realife.services.services.UserService;
 import com.realife.services.user.models.UserFilterRequest;
@@ -34,8 +35,23 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
 	private Specification<User> _buildUserSpec(UserFilterRequest filter) {
 		val specBuilder = new SearchSpecificationBuilder<User>();
-		if (!StringUtils.isBlank(filter.getEmail())) {
-			specBuilder.with("email", ":", filter.getEmail());
+		if (!StringUtils.isBlank(filter.getFirstName())) {
+			specBuilder.with("firstName", SearchOperation.EqualOrLike, filter.getFirstName());
+		}
+		if (!StringUtils.isBlank(filter.getLastName())) {
+			specBuilder.with("lastName", SearchOperation.EqualOrLike, filter.getLastName());
+		}
+		if (filter.getCreatedAtMin() != null) {
+			specBuilder.with("createdAt", SearchOperation.GreaterThanOrEqualTo, filter.getCreatedAtMin());
+		}
+		if (filter.getCreatedAtMax() != null) {
+			specBuilder.with("createdAt", SearchOperation.LessThanOrEqualTo, filter.getCreatedAtMax());
+		}
+		if (filter.getUpdatedAtMin() != null) {
+			specBuilder.with("updatedAt", SearchOperation.GreaterThanOrEqualTo, filter.getUpdatedAtMin());
+		}
+		if (filter.getUpdatedAtMax() != null) {
+			specBuilder.with("updatedAt", SearchOperation.LessThanOrEqualTo, filter.getUpdatedAtMax());
 		}
 
 		return specBuilder.build();

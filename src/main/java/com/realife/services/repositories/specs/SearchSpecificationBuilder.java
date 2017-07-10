@@ -16,7 +16,7 @@ public class SearchSpecificationBuilder<T extends BaseDomain> {
         params = new ArrayList<SearchCriteria>();
     }
     
-    public SearchSpecificationBuilder<T> with(String key, String operation, Object value) {
+    public SearchSpecificationBuilder<T> with(String key, SearchOperation operation, Object value) {
         params.add(new SearchCriteria(key, operation, value));
         return this;
     }

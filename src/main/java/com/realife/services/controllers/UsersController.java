@@ -43,7 +43,7 @@ public class UsersController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.filter")
-	public UserResponse getFromId(@PathVariable("id") Long id) {
+	public UserResponse getById(@PathVariable("id") Long id) {
 
 		val user = _userService.findById(id);
 		if (user == null)

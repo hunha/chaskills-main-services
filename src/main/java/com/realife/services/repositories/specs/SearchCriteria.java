@@ -8,13 +8,13 @@ import lombok.Setter;
 public class SearchCriteria {
 
 	private String key;
-    private String operation;
+    private SearchOperation operation;
     private Object value;
     
     public SearchCriteria() {
 	}
     
-    public SearchCriteria(String key, String operation, Object value) {
+    public SearchCriteria(String key, SearchOperation operation, Object value) {
     	this.key = key;
     	this.operation = operation;
     	this.value = value;

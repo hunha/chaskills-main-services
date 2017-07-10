@@ -1,5 +1,7 @@
 package com.realife.services.user.models;
 
+import java.util.Date;
+
 import com.realife.services.models.PagingFilterRequest;
 
 import lombok.Getter;
@@ -9,5 +11,10 @@ import lombok.Setter;
 @Setter
 public class UserFilterRequest extends PagingFilterRequest {
 
-	private String email;
+	private String firstName;
+	private String lastName;
+	private Date createdAtMin;
+	private Date createdAtMax;
+	private Date updatedAtMin;
+	private Date updatedAtMax;
 }
