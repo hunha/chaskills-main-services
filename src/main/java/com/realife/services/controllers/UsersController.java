@@ -20,23 +20,18 @@ public class UsersController extends BaseController {
 
 	@Autowired
 	UserRepository _userRepository;
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.filter")
 	public UsersResponse filter() {
-		val users = _userRepository.findAll();
 		val response = new UsersResponse();
 
+		val users = _userRepository.findAll();
 		for (User user : users) {
-			val userResponse = new UserResponse();
-			userResponse.setId(user.getId());
-			userResponse.setFirstName(user.getFirstName());
-			userResponse.setLastName(user.getLastName());
-			userResponse.setEmail(user.getEmail());
-			userResponse.setCreatedAt(user.getCreatedAt());
+			UserResponse userResponse = modelMapper.map(user, UserResponse.class);
 			response.add(userResponse);
 		}
-		
+
 		return response;
 	}
 }
