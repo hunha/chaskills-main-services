@@ -1,5 +1,7 @@
 # realife-services
 
+The main services for Realife, an application for lifelong learner.
+
 ## Maven plugin DB-Migrator
 
 * Create a new migration file:
