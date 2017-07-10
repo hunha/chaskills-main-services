@@ -10,4 +10,6 @@ import com.realife.services.user.models.UserFilterRequest;
 public interface UserService extends BaseService<User, Long> {
 
 	List<User> findAll(UserFilterRequest filter);
+	User findByEmail(String email);
+	User save(User user);
 }

@@ -4,8 +4,10 @@ CREATE TABLE users(
 	last_name			VARCHAR(50),
 	email 				VARCHAR(255) NOT NULL,
 	password_digest		VARCHAR(255) NOT NULL,
-	remember_digest		VARCHAR(255) NOT NULL,
+	remember_digest		VARCHAR(255) DEFAULT NULL,
 	created_at			DATETIME NOT NULL,
 	updated_at			DATETIME DEFAULT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	UNIQUE INDEX email_unique (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

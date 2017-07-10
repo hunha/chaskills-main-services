@@ -1,39 +1,34 @@
-package com.realife.services.domains;
+package com.realife.services.user.models;
 
 import java.util.Date;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+
+import com.realife.services.models.BaseRequest;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-public class User extends BaseDomain {
-	
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	
-	@NotBlank
+public class UserRequest extends BaseRequest {
+
+	@NotNull
 	@Length(max = 50)
 	private String firstName;
 	
 	@Length(max = 50)
 	private String lastName;
 	
-	@NotBlank
+	@NotNull
 	@Length(max = 255)
 	private String email;
 	
-	@NotBlank
+	@NotNull
 	@Length(max = 255)
-	private String passwordDigest;
+	private String password;
 	
 	@Length(max = 255)
 	private String rememberDigest;
