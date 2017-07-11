@@ -74,4 +74,31 @@ public class UsersController extends BaseController {
 		UserResponse response = modelMapper.map(user, UserResponse.class);
 		return response;
 	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
+	@HystrixCommand(groupKey = "users", commandKey = "users.update")
+	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model) throws Exception {
+
+		User user = _userService.findById(id);
+		if(user == null)
+			throw new NotFoundException();
+		
+		user.setFirstName(model.getFirstName());
+		user.setLastName(model.getLastName());
+		user.setPasswordDigest(model.getPassword());
+		user.setRememberDigest(model.getRememberDigest());
+		user = _userService.save(user);
+		if (user == null)
+			throw new InternalServerException();
+
+		UserResponse response = modelMapper.map(user, UserResponse.class);
+		return response;
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	@HystrixCommand(groupKey = "users", commandKey = "users.delete")
+	public void deleteUser(@PathVariable("id") Long id) throws Exception {
+
+		_userService.delete(id);
+	}
 }

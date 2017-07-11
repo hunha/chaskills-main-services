@@ -1,7 +1,5 @@
 package com.realife.services.user.models;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -32,9 +30,4 @@ public class UserRequest extends BaseRequest {
 	
 	@Length(max = 255)
 	private String rememberDigest;
-	
-	@NotNull
-	private Date createdAt;
-	
-	private Date updatedAt;
 }

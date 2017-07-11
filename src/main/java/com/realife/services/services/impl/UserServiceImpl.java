@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.realife.services.common.utilities.DateUtility;
 import com.realife.services.domains.User;
 import com.realife.services.repositories.UserRepository;
 import com.realife.services.repositories.specs.SearchOperation;
@@ -67,9 +68,20 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	public User findByEmail(String email) {
 		return _userRepository.findByEmail(email);
 	}
-	
+
 	@Override
 	public User save(User user) {
+		if (user.getId() == null) {
+			user.setCreatedAt(DateUtility.getUtcNow());
+		} else {
+			user.setUpdatedAt(DateUtility.getUtcNow());
+		}
+
 		return _userRepository.save(user);
+	}
+
+	@Override
+	public void delete(Long id) {
+		_userRepository.delete(id);
 	}
 }
