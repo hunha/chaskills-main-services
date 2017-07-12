@@ -13,10 +13,12 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.realife.services.common.utilities.DateUtility;
 import com.realife.services.user.models.UserResponse;
 
+@ActiveProfiles("test")
 public class UserTest {
 
 	private static Validator validator;

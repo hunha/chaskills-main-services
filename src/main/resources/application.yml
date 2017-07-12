@@ -10,6 +10,17 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.realife.services.configurations.RealNamingStrategyImpl
+  profiles:
+    active: dev
+
+# HTTP Server
+server:
+  port: 0   # HTTP (Tomcat) port
+  
+---
+
+spring:
+  profiles: dev
   datasource:
     url: jdbc:mysql://localhost/realife_development
     username: root
@@ -24,16 +35,12 @@ eureka:
   instance:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int}}
 
-# HTTP Server
-server:
-  port: 0   # HTTP (Tomcat) port
-
 ---
 
 spring:
-  profiles: development
+  profiles: staging
   datasource:
-    url: jdbc:mysql://localhost/realife_development
+    url: jdbc:mysql://localhost/realife
     username: root
     password: sa123..
     driver-class-name: com.mysql.jdbc.Driver
@@ -51,7 +58,7 @@ eureka:
 spring:
   profiles: production
   datasource:
-    url: jdbc:mysql://localhost/realife_development
+    url: jdbc:mysql://localhost/realife
     username: root
     password: sa123..
     driver-class-name: com.mysql.jdbc.Driver

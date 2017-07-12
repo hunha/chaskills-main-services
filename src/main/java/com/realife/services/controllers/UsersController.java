@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,19 +75,30 @@ public class UsersController extends BaseController {
 		UserResponse response = modelMapper.map(user, UserResponse.class);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.update")
-	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model) throws Exception {
-
-		User user = _userService.findById(id);
-		if(user == null)
-			throw new NotFoundException();
+	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model)
+			throws Exception {
 		
-		user.setFirstName(model.getFirstName());
-		user.setLastName(model.getLastName());
-		user.setPasswordDigest(model.getPassword());
-		user.setRememberDigest(model.getRememberDigest());
+		// TODO: Should allow JSON missing some properties.
+		
+		User user = _userService.findById(id);
+		if (user == null)
+			throw new NotFoundException();
+
+		if (!StringUtils.isBlank(model.getFirstName()))
+			user.setFirstName(model.getFirstName());
+
+		if (!StringUtils.isBlank(model.getLastName()))
+			user.setLastName(model.getLastName());
+
+		if (!StringUtils.isBlank(model.getPassword()))
+			user.setPasswordDigest(model.getPassword());
+
+		if (!StringUtils.isBlank(model.getRememberDigest()))
+			user.setRememberDigest(model.getRememberDigest());
+
 		user = _userService.save(user);
 		if (user == null)
 			throw new InternalServerException();
@@ -94,7 +106,7 @@ public class UsersController extends BaseController {
 		UserResponse response = modelMapper.map(user, UserResponse.class);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.delete")
 	public void deleteUser(@PathVariable("id") Long id) throws Exception {

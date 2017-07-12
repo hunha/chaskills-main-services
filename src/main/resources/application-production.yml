@@ -1,0 +1,15 @@
+spring:
+  profiles: default
+  datasource:
+    url: jdbc:mysql://localhost/realife
+    username: root
+    password: sa123..
+    driver-class-name: com.mysql.jdbc.Driver
+    
+# Discovery Server Access
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.eureka-service.credentials.uri:http://127.0.0.1:8761}/eureka/
+  instance:
+      instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int}}
