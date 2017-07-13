@@ -1,10 +1,10 @@
 package com.realife.services.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
-public class ForbiddenException extends RuntimeException {
+import com.realife.services.models.ErrorResponse;
+
+public class ForbiddenException extends ResponseException {
 
 	/**
 	 * 
@@ -25,5 +25,15 @@ public class ForbiddenException extends RuntimeException {
 
 	public ForbiddenException(Throwable cause) {
 		super(cause);
+	}
+	
+	@Override
+	public ErrorResponse getResponse() {
+		return new ErrorResponse("Forbidden");
+	}
+	
+	@Override
+	public HttpStatus getHttpStatus() {
+		return HttpStatus.FORBIDDEN;
 	}
 }

@@ -1,10 +1,10 @@
 package com.realife.services.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException {
+import com.realife.services.models.ErrorResponse;
+
+public class BadRequestException extends ResponseException {
 
 	/**
 	 * 
@@ -25,5 +25,15 @@ public class BadRequestException extends RuntimeException {
 
 	public BadRequestException(Throwable cause) {
 		super(cause);
+	}
+
+	@Override
+	public ErrorResponse getResponse() {
+		return new ErrorResponse("Bad Request");
+	}
+
+	@Override
+	public HttpStatus getHttpStatus() {
+		return HttpStatus.BAD_REQUEST;
 	}
 }

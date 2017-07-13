@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,7 +61,10 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@HystrixCommand(groupKey = "users", commandKey = "users.create")
-	public UserResponse createUser(@Valid @RequestBody UserRequest model) throws Exception {
+	public UserResponse createUser(@Valid @RequestBody UserRequest model, BindingResult result) throws Exception {
+
+		if (result.hasErrors())
+			throw new InvalidFormException(result);
 
 		User user = _userService.findByEmail(model.getEmail());
 		if (user != null)
@@ -78,11 +82,11 @@ public class UsersController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.update")
-	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model)
-			throws Exception {
-		
+	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model,
+			BindingResult result) throws Exception {
+
 		// TODO: Should allow JSON missing some properties.
-		
+
 		User user = _userService.findById(id);
 		if (user == null)
 			throw new NotFoundException();
@@ -110,6 +114,10 @@ public class UsersController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.delete")
 	public void deleteUser(@PathVariable("id") Long id) throws Exception {
+
+		User user = _userService.findById(id);
+		if (user == null)
+			throw new NotFoundException();
 
 		_userService.delete(id);
 	}

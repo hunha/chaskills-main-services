@@ -1,10 +1,10 @@
 package com.realife.services.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-public class InternalServerException extends RuntimeException {
+import com.realife.services.models.ErrorResponse;
+
+public class InternalServerException extends ResponseException {
 
 	/**
 	 * 
@@ -15,15 +15,17 @@ public class InternalServerException extends RuntimeException {
 		super();
 	}
 
-	public InternalServerException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public InternalServerException(String message) {
 		super(message);
 	}
 
-	public InternalServerException(Throwable cause) {
-		super(cause);
+	@Override
+	public ErrorResponse getResponse() {
+		return new ErrorResponse(this.getMessage());
+	}
+
+	@Override
+	public HttpStatus getHttpStatus() {
+		return HttpStatus.INTERNAL_SERVER_ERROR;
 	}
 }

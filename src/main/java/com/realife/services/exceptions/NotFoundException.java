@@ -1,10 +1,10 @@
 package com.realife.services.exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NotFoundException extends RuntimeException {
+import com.realife.services.models.ErrorResponse;
+
+public class NotFoundException extends ResponseException {
 
 	/**
 	 * 
@@ -15,15 +15,17 @@ public class NotFoundException extends RuntimeException {
 		super();
 	}
 
-	public NotFoundException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public NotFoundException(String message) {
 		super(message);
 	}
+	
+	@Override
+	public ErrorResponse getResponse() {
+		return new ErrorResponse("Not Found");
+	}
 
-	public NotFoundException(Throwable cause) {
-		super(cause);
+	@Override
+	public HttpStatus getHttpStatus() {
+		return HttpStatus.NOT_FOUND;
 	}
 }
