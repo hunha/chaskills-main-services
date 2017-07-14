@@ -18,10 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.realife.services.base.Application;
 import com.realife.services.domains.User;
+import com.realife.services.models.users.UserRequest;
+import com.realife.services.models.users.UserResponse;
+import com.realife.services.models.users.UsersResponse;
 import com.realife.services.services.UserService;
-import com.realife.services.user.models.UserRequest;
-import com.realife.services.user.models.UserResponse;
-import com.realife.services.user.models.UsersResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

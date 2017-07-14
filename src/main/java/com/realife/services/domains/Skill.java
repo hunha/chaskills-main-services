@@ -2,7 +2,7 @@ package com.realife.services.domains;
 
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -14,28 +14,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User extends BaseDomain {
-
-	@NotBlank
-	@Length(max = 50)
-	private String firstName;
-
-	@Length(max = 50)
-	private String lastName;
-
-	@NotBlank
-	@Length(max = 255)
-	private String email;
-
+public class Skill extends BaseDomain {
+	
+	@NotNull
+	private Long userId;
+	
+	@NotNull
+	private Long CharacteriseId;
+	
 	@NotBlank
 	@Length(max = 255)
-	private String passwordDigest;
-
-	@Length(max = 255)
-	private String rememberDigest;
-
+	private String name;
+	
+	private int level;
+	
+	@NotNull
+	private Long points;
+	
+	@Length(max = 512)
+	private String description;
+	
 	@NotNull
 	private Date createdAt;
-
+	
 	private Date updatedAt;
 }

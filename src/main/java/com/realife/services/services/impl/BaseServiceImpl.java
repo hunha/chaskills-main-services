@@ -2,12 +2,12 @@ package com.realife.services.services.impl;
 
 import org.springframework.data.domain.PageRequest;
 
-import com.realife.services.domains.User;
-import com.realife.services.user.models.UserFilterRequest;
+import com.realife.services.domains.BaseDomain;
+import com.realife.services.models.PagingFilterRequest;
 
-public class BaseServiceImpl<T extends User> {
+public class BaseServiceImpl<T extends BaseDomain> {
 
-	protected PageRequest buildPageRequest(UserFilterRequest filter) {
+	protected PageRequest buildPageRequest(PagingFilterRequest filter) {
 		return new PageRequest(filter.getPage() - 1, filter.getLimit());
 	}
 }

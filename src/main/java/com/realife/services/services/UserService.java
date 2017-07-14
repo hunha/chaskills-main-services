@@ -1,11 +1,9 @@
 package com.realife.services.services;
 
-
 import java.util.List;
 
 import com.realife.services.domains.User;
-import com.realife.services.user.models.UserFilterRequest;
-
+import com.realife.services.models.users.UserFilterRequest;
 
 public interface UserService extends BaseService<User, Long> {
 

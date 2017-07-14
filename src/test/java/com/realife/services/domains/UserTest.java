@@ -15,8 +15,8 @@ import org.junit.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.realife.services.common.utilities.DateUtility;
-import com.realife.services.user.models.UserResponse;
+import com.realife.services.common.util.DateUtil;
+import com.realife.services.models.users.UserResponse;
 
 @ActiveProfiles("test")
 public class UserTest {
@@ -36,7 +36,7 @@ public class UserTest {
 		user.setFirstName("Hung");
 		user.setLastName("Nguyen");
 		user.setPasswordDigest("123456");
-		user.setCreatedAt(DateUtility.getUtcNow());
+		user.setCreatedAt(DateUtil.getUtcNow());
 	}
 	
 	@Test

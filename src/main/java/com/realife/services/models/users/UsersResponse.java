@@ -1,4 +1,4 @@
-package com.realife.services.user.models;
+package com.realife.services.models.users;
 
 import java.util.ArrayList;
 

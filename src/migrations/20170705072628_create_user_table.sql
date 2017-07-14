@@ -8,6 +8,6 @@ CREATE TABLE users(
 	created_at			DATETIME NOT NULL,
 	updated_at			DATETIME DEFAULT NULL,
 	PRIMARY KEY (id),
-	UNIQUE INDEX email_unique (email)
+	UNIQUE INDEX users_idx_email_unique (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

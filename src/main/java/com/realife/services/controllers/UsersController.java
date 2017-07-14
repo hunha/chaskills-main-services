@@ -19,8 +19,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.realife.services.base.BaseController;
 import com.realife.services.domains.User;
 import com.realife.services.exceptions.*;
+import com.realife.services.models.users.*;
 import com.realife.services.services.UserService;
-import com.realife.services.user.models.*;
 
 import lombok.val;
 
@@ -29,7 +29,7 @@ import lombok.val;
 public class UsersController extends BaseController {
 
 	@Autowired
-	UserService _userService;
+	UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.filter")
@@ -37,7 +37,7 @@ public class UsersController extends BaseController {
 
 		val response = new UsersResponse();
 
-		List<User> users = _userService.findAll(filter);
+		List<User> users = userService.findAll(filter);
 		for (User user : users) {
 			UserResponse userResponse = modelMapper.map(user, UserResponse.class);
 			response.add(userResponse);
@@ -50,7 +50,7 @@ public class UsersController extends BaseController {
 	@HystrixCommand(groupKey = "users", commandKey = "users.get_by_id")
 	public UserResponse getById(@PathVariable("id") Long id) {
 
-		val user = _userService.findById(id);
+		val user = userService.findById(id);
 		if (user == null)
 			throw new NotFoundException();
 
@@ -66,13 +66,14 @@ public class UsersController extends BaseController {
 		if (result.hasErrors())
 			throw new InvalidFormException(result);
 
-		User user = _userService.findByEmail(model.getEmail());
+		User user = userService.findByEmail(model.getEmail());
 		if (user != null)
 			throw new ForbiddenException("email is existed.");
 
 		user = modelMapper.map(model, User.class);
+		user.setId(null);
 		user.setPasswordDigest(model.getPassword());
-		user = _userService.save(user);
+		user = userService.save(user);
 		if (user == null)
 			throw new InternalServerException();
 
@@ -85,12 +86,11 @@ public class UsersController extends BaseController {
 	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model,
 			BindingResult result) throws Exception {
 
-		// TODO: Should allow JSON missing some properties.
-
-		User user = _userService.findById(id);
+		User user = userService.findById(id);
 		if (user == null)
 			throw new NotFoundException();
 
+		// TODO: Update by JSON body fields.
 		if (!StringUtils.isBlank(model.getFirstName()))
 			user.setFirstName(model.getFirstName());
 
@@ -103,7 +103,7 @@ public class UsersController extends BaseController {
 		if (!StringUtils.isBlank(model.getRememberDigest()))
 			user.setRememberDigest(model.getRememberDigest());
 
-		user = _userService.save(user);
+		user = userService.save(user);
 		if (user == null)
 			throw new InternalServerException();
 
@@ -115,10 +115,10 @@ public class UsersController extends BaseController {
 	@HystrixCommand(groupKey = "users", commandKey = "users.delete")
 	public void deleteUser(@PathVariable("id") Long id) throws Exception {
 
-		User user = _userService.findById(id);
+		User user = userService.findById(id);
 		if (user == null)
 			throw new NotFoundException();
 
-		_userService.delete(id);
+		userService.delete(id);
 	}
 }

@@ -8,13 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.realife.services.common.utilities.DateUtility;
+import com.realife.services.common.util.DateUtil;
 import com.realife.services.domains.User;
+import com.realife.services.models.users.UserFilterRequest;
 import com.realife.services.repositories.UserRepository;
 import com.realife.services.repositories.specs.SearchOperation;
 import com.realife.services.repositories.specs.SearchSpecificationBuilder;
 import com.realife.services.services.UserService;
-import com.realife.services.user.models.UserFilterRequest;
 
 import lombok.val;
 
@@ -22,19 +22,19 @@ import lombok.val;
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
 	@Autowired
-	UserRepository _userRepository;
+	UserRepository userRepository;
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<User> findAll(UserFilterRequest filter) {
 
-		val spec = _buildUserSpec(filter);
+		val spec = buildUserSpec(filter);
 		val pageRequest = buildPageRequest(filter);
-		Page<User> users = _userRepository.findAll(spec, pageRequest);
+		Page<User> users = userRepository.findAll(spec, pageRequest);
 		return users.getContent();
 	}
 
-	private Specification<User> _buildUserSpec(UserFilterRequest filter) {
+	private Specification<User> buildUserSpec(UserFilterRequest filter) {
 		val specBuilder = new SearchSpecificationBuilder<User>();
 		if (!StringUtils.isBlank(filter.getFirstName())) {
 			specBuilder.with("firstName", SearchOperation.EqualOrLike, filter.getFirstName());
@@ -61,27 +61,27 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public User findById(Long id) {
 
-		return _userRepository.findById(id);
+		return userRepository.findById(id);
 	}
 
 	@Override
 	public User findByEmail(String email) {
-		return _userRepository.findByEmail(email);
+		return userRepository.findByEmail(email);
 	}
 
 	@Override
 	public User save(User user) {
 		if (user.getId() == null) {
-			user.setCreatedAt(DateUtility.getUtcNow());
+			user.setCreatedAt(DateUtil.getUtcNow());
 		} else {
-			user.setUpdatedAt(DateUtility.getUtcNow());
+			user.setUpdatedAt(DateUtil.getUtcNow());
 		}
 
-		return _userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	@Override
 	public void delete(Long id) {
-		_userRepository.delete(id);
+		userRepository.delete(id);
 	}
 }
