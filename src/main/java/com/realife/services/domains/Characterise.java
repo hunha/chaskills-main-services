@@ -23,7 +23,7 @@ public class Characterise extends BaseDomain {
 	private Long userId;
 	
 	@NotBlank
-	@Length(max = 256)
+	@Length(max = 255)
 	private String name;
 	
 	private int level;

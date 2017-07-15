@@ -14,12 +14,10 @@ import javax.validation.ValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.realife.services.common.util.DateUtil;
 import com.realife.services.models.users.UserResponse;
 
-@ActiveProfiles("test")
 public class UserTest {
 
 	private static Validator validator;
@@ -48,7 +46,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void givenFirstNameNull_whenCreateUser_thenInvalid() {
+	public void givenFirstNameNull_whenNewUser_thenInvalid() {
 		user.setFirstName(null);
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -58,7 +56,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenFirstNameEmpty_whenCreateUser_thenInvalid() {
+	public void givenFirstNameEmpty_whenNewUser_thenInvalid() {
 		user.setFirstName("");
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -68,7 +66,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenFirstNameTooLong_whenCreateUser_thenInvalid() {
+	public void givenFirstNameTooLong_whenNewUser_thenInvalid() {
 		user.setFirstName(String.join("", Collections.nCopies(51, "a")));
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -78,7 +76,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenLastNameTooLong_whenCreateUser_thenInvalid() {
+	public void givenLastNameTooLong_whenNewUser_thenInvalid() {
 		user.setLastName(String.join("", Collections.nCopies(51, "a")));
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -88,7 +86,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenEmailNull_whenCreateUser_thenInvalid() {
+	public void givenEmailNull_whenNewUser_thenInvalid() {
 		user.setEmail(null);
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -98,7 +96,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenEmailEmpty_whenCreateUser_thenInvalid() {
+	public void givenEmailEmpty_whenNewUser_thenInvalid() {
 		user.setEmail("");
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -108,7 +106,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenEmailTooLong_whenCreateUser_thenInvalid() {
+	public void givenEmailTooLong_whenNewUser_thenInvalid() {
 		user.setEmail(String.join("", Collections.nCopies(256, "a")));
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -118,7 +116,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenPasswordDigestNull_whenCreateUser_thenInvalid() {
+	public void givenPasswordDigestNull_whenNewUser_thenInvalid() {
 		user.setPasswordDigest(null);
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -128,7 +126,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenPasswordDigestEmpty_whenCreateUser_thenInvalid() {
+	public void givenPasswordDigestEmpty_whenNewUser_thenInvalid() {
 		user.setPasswordDigest("");
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -138,7 +136,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenPasswordDigestTooLong_whenCreateUser_thenInvalid() {
+	public void givenPasswordDigestTooLong_whenNewUser_thenInvalid() {
 		user.setPasswordDigest(String.join("", Collections.nCopies(256, "a")));
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -148,7 +146,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenRememberDigestTooLong_whenCreateUser_thenInvalid() {
+	public void givenRememberDigestTooLong_whenNewUser_thenInvalid() {
 		user.setRememberDigest(String.join("", Collections.nCopies(256, "a")));
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -158,7 +156,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void givenCreatedAtNull_whenCreateUser_thenInvalid() {
+	public void givenCreatedAtNull_whenNewUser_thenInvalid() {
 		user.setCreatedAt(null);
 		
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
