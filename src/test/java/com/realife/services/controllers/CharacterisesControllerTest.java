@@ -20,8 +20,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.realife.services.base.Application;
 import com.realife.services.domains.Characterise;
+import com.realife.services.domains.User;
 import com.realife.services.models.characterises.CharacterisesResponse;
 import com.realife.services.services.CharacteriseService;
+import com.realife.services.services.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -34,27 +36,44 @@ public class CharacterisesControllerTest {
 	private ObjectMapper jsonMapper;
 	@Autowired
 	private CharacteriseService characteriseService;
-	
+	@Autowired
+	private UserService userService;
+
 	private Characterise characterise;
-	
+	private User user;
+
 	@Before
 	public void init() {
-		characterise = new Characterise();
-		characterise.setId(null);
-		characterise.setUserId(new Long(1));
-		characterise.setName("Skill" + Math.random());
-		characterise.setLevel(Characterise.DEFAULT_LEVEL);
-		characterise.setPoints(Characterise.DEFAULT_POINTS);
-		characteriseService.save(characterise);
+		if (user == null) {
+			user = new User();
+			user.setEmail("hungtest" + Math.random() + "@gmail.com");
+			user.setFirstName("Hung");
+			user.setLastName("Nguyen");
+			user.setPasswordDigest("123456");
+			user = userService.save(user);
+		}
+		
+		if (characterise == null) {
+			characterise = new Characterise();
+			characterise.setId(null);
+			characterise.setUserId(user.getId());
+			characterise.setName("Skill" + Math.random());
+			characterise.setLevel(Characterise.DEFAULT_LEVEL);
+			characterise.setPoints(Characterise.DEFAULT_POINTS);
+			characteriseService.save(characterise);
+		}
 	}
-	
+
 	@After
 	public void dispose() {
-		characteriseService.delete(characterise.getId());
+		if (characterise != null) {
+			characteriseService.delete(characterise.getId());
+			characterise = null;
+		}
 	}
 
 	@Test
-	public void shouldGetFilter() throws Exception {
+	public void whenGetFilter_thenCorrect() throws Exception {
 		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/characterises").accept(MediaType.APPLICATION_JSON))
 				.andReturn();
 		CharacterisesResponse response = jsonMapper.readValue(result.getResponse().getContentAsString(),
