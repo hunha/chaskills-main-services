@@ -8,14 +8,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.realife.services.base.Application;
 import com.realife.services.domains.User;
 import com.realife.services.models.users.UserRequest;
@@ -24,46 +26,47 @@ import com.realife.services.models.users.UsersResponse;
 import com.realife.services.services.UserService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class)
+@AutoConfigureMockMvc
 public class UserControllerTest {
 
 	@Autowired
-	private TestRestTemplate restTemplate;
-
+	private ObjectMapper jsonMapper;
+	@Autowired
+	private MockMvc mvc;
 	@Autowired
 	private UserService userService;
 
 	private UserRequest userRequest;
 	private User user;
-	private User userToBeDeleted;
 	private Long createdUserId;
 
 	@Before
 	public void init() {
-		user = new User();
-		user.setEmail("hungtest" + Math.random() + "@gmail.com");
-		user.setFirstName("Hung");
-		user.setLastName("Nguyen");
-		user.setPasswordDigest("123456");
-		user = userService.save(user);
-
-		userToBeDeleted = new User();
-		userToBeDeleted.setEmail("hungtest" + Math.random() + "@gmail.com");
-		userToBeDeleted.setFirstName("Hung");
-		userToBeDeleted.setLastName("Nguyen");
-		userToBeDeleted.setPasswordDigest("123456");
-		userToBeDeleted = userService.save(userToBeDeleted);
-
-		userRequest = new UserRequest();
-		userRequest.setEmail("hungtest" + Math.random() + "@gmail.com");
-		userRequest.setFirstName("Hung 2");
-		userRequest.setLastName("Meo");
-		userRequest.setPassword("12346");
+		if (user == null) {
+			user = new User();
+			user.setEmail("hungtest" + Math.random() + "@gmail.com");
+			user.setFirstName("Hung");
+			user.setLastName("Nguyen");
+			user.setPasswordDigest("123456");
+			user = userService.save(user);
+		}
+		
+		if (userRequest == null) {
+			userRequest = new UserRequest();
+			userRequest.setEmail("hungtest" + Math.random() + "@gmail.com");
+			userRequest.setFirstName("Hung 2");
+			userRequest.setLastName("Meo");
+			userRequest.setPassword("12346");
+		}
 	}
 
 	@After
 	public void dispose() {
-		userService.delete(user.getId());
+		if (user != null) {
+			userService.delete(user.getId());
+			user = null;
+		}
 
 		if (createdUserId != null)
 			userService.delete(createdUserId);
@@ -71,31 +74,48 @@ public class UserControllerTest {
 
 	@Test
 	public void shouldGetFilter() throws Exception {
-		ResponseEntity<UsersResponse> response = restTemplate.getForEntity("/users", UsersResponse.class);
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/users").accept(MediaType.APPLICATION_JSON))
+				.andReturn();
+		UsersResponse response = getResponse(result, UsersResponse.class);
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-		assertThat(response.getBody(), not(empty()));
+		assertThat(result.getResponse().getStatus(), equalTo(HttpStatus.OK.value()));
+		assertThat(response, not(empty()));
+	}
+
+	private <T> T getResponse(MvcResult result, Class<T> type) {
+
+		try {
+			return jsonMapper.readValue(result.getResponse().getContentAsString(), type);
+		} catch (Exception e) {
+		}
+
+		return null;
 	}
 
 	@Test
 	public void shouldGetById() throws Exception {
 		String path = "/users/" + user.getId();
-		ResponseEntity<UserResponse> response = restTemplate.getForEntity(path, UserResponse.class);
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get(path).accept(MediaType.APPLICATION_JSON)).andReturn();
+		UserResponse response = getResponse(result, UserResponse.class);
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-		assertThat(response.getBody(), is(notNullValue()));
-		assertThat(response.getBody().getId(), equalTo(user.getId()));
+		assertThat(result.getResponse().getStatus(), equalTo(HttpStatus.OK.value()));
+		assertThat(response, is(notNullValue()));
+		assertThat(response.getId(), equalTo(user.getId()));
 	}
 
 	@Test
 	public void shouldCreateUser() throws Exception {
-		ResponseEntity<UserResponse> response = restTemplate.postForEntity("/users", userRequest, UserResponse.class);
+		String jsonRequest = jsonMapper.writeValueAsString(userRequest);
+		MvcResult result = mvc.perform(
+				MockMvcRequestBuilders.post("/users").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
+				.andReturn();
+		UserResponse response = getResponse(result, UserResponse.class);
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-		assertThat(response.getBody(), is(notNullValue()));
-		assertThat(response.getBody().getEmail(), equalTo(userRequest.getEmail()));
+		assertThat(result.getResponse().getStatus(), equalTo(HttpStatus.CREATED.value()));
+		assertThat(response, is(notNullValue()));
+		assertThat(response.getEmail(), equalTo(userRequest.getEmail()));
 
-		createdUserId = response.getBody().getId();
+		createdUserId = response.getId();
 	}
 
 	@Test
@@ -107,25 +127,24 @@ public class UserControllerTest {
 		userRequest.setLastName(user.getFirstName());
 		userRequest.setPassword("12346");
 
-		HttpHeaders headers = new HttpHeaders();
-		HttpEntity<UserRequest> request = new HttpEntity<UserRequest>(userRequest, headers);
+		String jsonRequest = jsonMapper.writeValueAsString(userRequest);
+		MvcResult result = mvc
+				.perform(MockMvcRequestBuilders.put(path).contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
+				.andReturn();
+		UserResponse response = getResponse(result, UserResponse.class);
 
-		ResponseEntity<UserResponse> response = restTemplate.exchange(path, HttpMethod.PUT, request,
-				UserResponse.class);
-
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		assertThat(result.getResponse().getStatus(), equalTo(HttpStatus.OK.value()));
 		assertThat(response, is(notNullValue()));
-		assertThat(response.getBody().getFirstName(), equalTo(userRequest.getFirstName()));
+		assertThat(response.getFirstName(), equalTo(userRequest.getFirstName()));
 	}
 
 	@Test
 	public void shouldDeleteUser() throws Exception {
-		String path = "/users/" + userToBeDeleted.getId();
-		HttpHeaders headers = new HttpHeaders();
-		HttpEntity<String> request = new HttpEntity<String>(null, headers);
-
-		ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.DELETE, request, String.class);
+		String path = "/users/" + user.getId();
+		user = null;
 		
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.delete(path)).andReturn();
+
+		assertThat(result.getResponse().getStatus(), equalTo(HttpStatus.OK.value()));
 	}
 }
