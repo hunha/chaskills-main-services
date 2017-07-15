@@ -7,4 +7,5 @@ import com.realife.services.domains.Characterise;
 public interface CharacteriseRepository extends BaseRepository<Characterise, Long> {
 
 	List<Characterise> findByUserId(Long userId); 
+	Characterise findByName(Long userId, String name);
 }

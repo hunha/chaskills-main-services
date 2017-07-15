@@ -61,7 +61,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@HystrixCommand(groupKey = "users", commandKey = "users.create")
-	public UserResponse createUser(@Valid @RequestBody UserRequest model, BindingResult result) throws Exception {
+	public UserResponse create(@Valid @RequestBody UserRequest model, BindingResult result) throws Exception {
 
 		if (result.hasErrors())
 			throw new InvalidFormException(result);
@@ -83,7 +83,7 @@ public class UsersController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.update")
-	public UserResponse updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model,
+	public UserResponse update(@PathVariable("id") Long id, @Valid @RequestBody UserRequest model,
 			BindingResult result) throws Exception {
 
 		User user = userService.findById(id);
@@ -113,7 +113,7 @@ public class UsersController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@HystrixCommand(groupKey = "users", commandKey = "users.delete")
-	public void deleteUser(@PathVariable("id") Long id) throws Exception {
+	public void delete(@PathVariable("id") Long id) throws Exception {
 
 		User user = userService.findById(id);
 		if (user == null)

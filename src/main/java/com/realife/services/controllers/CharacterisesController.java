@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +72,7 @@ public class CharacterisesController extends BaseController {
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	@HystrixCommand(groupKey = "characterises", commandKey = "characterises.create")
-	public CharacteriseResponse createCharacterise(@Valid @RequestBody CharacteriseRequest model, BindingResult result)
+	public CharacteriseResponse create(@Valid @RequestBody CharacteriseRequest model, BindingResult result)
 			throws Exception {
 
 		if (result.hasErrors())
@@ -81,7 +82,13 @@ public class CharacterisesController extends BaseController {
 		if (user == null)
 			throw new NotFoundException();
 
-		Characterise characterise = modelMapper.map(model, Characterise.class);
+		Characterise characterise = characteriseService.findByName(user.getId(), model.getName());
+		if (characterise != null) {
+			result.addError(new ObjectError("name", "is existed"));
+			throw new InvalidFormException(result);
+		}
+
+		characterise = modelMapper.map(model, Characterise.class);
 		characterise.setId(null);
 		characterise.setLevel(Characterise.DEFAULT_LEVEL);
 		characterise.setPoints(Characterise.DEFAULT_POINTS);
@@ -95,8 +102,8 @@ public class CharacterisesController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
 	@HystrixCommand(groupKey = "characterises", commandKey = "characterises.update")
-	public CharacteriseResponse updateCharacterise(@PathVariable("id") Long id,
-			@Valid @RequestBody CharacteriseRequest model, BindingResult result) throws Exception {
+	public CharacteriseResponse update(@PathVariable("id") Long id, @Valid @RequestBody CharacteriseRequest model,
+			BindingResult result) throws Exception {
 
 		Characterise characterise = characteriseService.findById(id);
 		if (characterise == null)
@@ -119,7 +126,7 @@ public class CharacterisesController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@HystrixCommand(groupKey = "characterises", commandKey = "characterises.delete")
-	public void deleteCharacterise(@PathVariable("id") Long id) throws Exception {
+	public void delete(@PathVariable("id") Long id) throws Exception {
 
 		Characterise characterises = characteriseService.findById(id);
 		if (characterises == null)

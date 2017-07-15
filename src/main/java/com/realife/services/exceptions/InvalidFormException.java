@@ -26,8 +26,13 @@ public class InvalidFormException extends ResponseException {
 
 	public InvalidFormException(BindingResult result) {
 		super();
-		errors = new HashMap<String, List<String>>();
+		this.errors = new HashMap<String, List<String>>();
 		addError(result);
+	}
+	
+	public InvalidFormException(HashMap<String, List<String>> errors) {
+		super();
+		this.errors = errors; 
 	}
 
 	public void addError(BindingResult result) {

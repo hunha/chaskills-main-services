@@ -24,7 +24,7 @@ import com.realife.services.models.users.UsersResponse;
 import com.realife.services.services.UserService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class)
 public class UserControllerTest {
 
 	@Autowired

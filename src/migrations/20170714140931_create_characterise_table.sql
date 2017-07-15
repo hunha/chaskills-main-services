@@ -8,5 +8,6 @@ CREATE TABLE characterises(
 	created_at			DATETIME NOT NULL,
 	updated_at			DATETIME DEFAULT NULL,
 	PRIMARY KEY (id),
-	INDEX characterises_idx_user_id (user_id)
+	INDEX characterises_idx_user_id (user_id),
+	UNIQUE INDEX characterise_idx_unique_user_name (user_id,name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

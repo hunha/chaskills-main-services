@@ -53,6 +53,11 @@ public class CharacteriseServiceImpl extends BaseServiceImpl<Characterise> imple
 
 		return characteriseRepository.findById(id);
 	}
+	
+	@Override
+	public Characterise findByName(Long userId, String name) {
+		return characteriseRepository.findByName(userId, name);
+	}
 
 	@Override
 	public Characterise save(Characterise characterise) {

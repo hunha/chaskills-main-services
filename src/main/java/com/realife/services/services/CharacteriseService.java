@@ -9,6 +9,7 @@ public interface CharacteriseService extends BaseService<Characterise, Long> {
 
 	List<Characterise> findAll(CharacteriseFilterRequest filter);
 	List<Characterise> findByUserId(Long userId);
+	Characterise findByName(Long userId, String name);
 	Characterise save(Characterise characterise);
 	void delete(Long id);
 }
