@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
 
-import com.realife.services.common.util.DateUtil;
+import com.realife.services.common.util.DateUtils;
 import com.realife.services.models.characterises.CharacteriseResponse;
 
 public class CharacteriseTest {
@@ -35,7 +35,7 @@ public class CharacteriseTest {
 		characterise.setLevel(Characterise.DEFAULT_LEVEL);
 		characterise.setPoints(Characterise.DEFAULT_POINTS);
 		characterise.setUserId(new Long(1));
-		characterise.setCreatedAt(DateUtil.getUtcNow());
+		characterise.setCreatedAt(DateUtils.getUtcNow());
 	}
 
 	@Test

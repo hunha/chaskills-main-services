@@ -15,8 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.realife.services.base.Application;
-import com.realife.services.common.util.DateUtil;
+import com.realife.services.common.util.DateUtils;
+import com.realife.services.domains.Characterise;
 import com.realife.services.domains.User;
+import com.realife.services.models.characterises.CharacteriseFilterRequest;
 import com.realife.services.models.users.UserFilterRequest;
 import com.realife.services.repositories.UserRepository;
 
@@ -30,18 +32,30 @@ public class UserServiceTest {
 	private UserRepository userRepository;
 
 	private User user;
+	private User anotherUser;
 
 	@Before
 	public void init() {
 		if (user == null) {
 			user = new User();
-			user.setEmail("unittest" + Math.random() + "@gmail.com");
+			user.setEmail("user_test" + Math.random() + "@gmail.com");
 			user.setFirstName("Unit");
 			user.setLastName("Test");
 			user.setPasswordDigest("123456");
-			user.setCreatedAt(DateUtil.getUtcNow());
-			user.setUpdatedAt(DateUtil.getUtcNow());
+			user.setCreatedAt(DateUtils.getUtcNow());
+			user.setUpdatedAt(DateUtils.getUtcNow());
 			user = userRepository.save(user);
+		}
+		
+		if (anotherUser == null) {
+			anotherUser = new User();
+			anotherUser.setEmail("another_user_test" + Math.random() + "@gmail.com");
+			anotherUser.setFirstName("Unit");
+			anotherUser.setLastName("Test");
+			anotherUser.setPasswordDigest("123456");
+			anotherUser.setCreatedAt(DateUtils.getUtcNow());
+			anotherUser.setUpdatedAt(DateUtils.getUtcNow());
+			anotherUser = userRepository.save(anotherUser);
 		}
 	}
 
@@ -50,6 +64,11 @@ public class UserServiceTest {
 		if (user != null) {
 			userRepository.delete(user.getId());
 			user = null;
+		}
+		
+		if (anotherUser != null) {
+			userRepository.delete(anotherUser.getId());
+			anotherUser = null;
 		}
 	}
 
@@ -103,7 +122,7 @@ public class UserServiceTest {
 	@Test
 	public void givenCreatedAtMin_whenFindAll_thenFound() {
 		UserFilterRequest filter = new UserFilterRequest();
-		Date filterDate = DateUtil.addDays(user.getCreatedAt(), -1);
+		Date filterDate = DateUtils.addDays(user.getCreatedAt(), -1);
 		filter.setCreatedAtMin(filterDate);
 
 		List<User> users = userService.findAll(filter);
@@ -114,7 +133,7 @@ public class UserServiceTest {
 	@Test
 	public void givenCreatedAtMax_whenFindAll_thenFound() {
 		UserFilterRequest filter = new UserFilterRequest();
-		Date filterDate = DateUtil.addDays(user.getCreatedAt(), 1);
+		Date filterDate = DateUtils.addDays(user.getCreatedAt(), 1);
 		filter.setCreatedAtMax(filterDate);
 
 		List<User> users = userService.findAll(filter);
@@ -125,7 +144,7 @@ public class UserServiceTest {
 	@Test
 	public void givenUpdatedAtMin_whenFindAll_thenFound() {
 		UserFilterRequest filter = new UserFilterRequest();
-		Date filterDate = DateUtil.addDays(user.getUpdatedAt(), -1);
+		Date filterDate = DateUtils.addDays(user.getUpdatedAt(), -1);
 		filter.setUpdatedAtMin(filterDate);
 
 		List<User> users = userService.findAll(filter);
@@ -136,7 +155,7 @@ public class UserServiceTest {
 	@Test
 	public void givenUpdatedAtMax_whenFindAll_thenFound() {
 		UserFilterRequest filter = new UserFilterRequest();
-		Date filterDate = DateUtil.addDays(user.getUpdatedAt(), 1);
+		Date filterDate = DateUtils.addDays(user.getUpdatedAt(), 1);
 		filter.setUpdatedAtMax(filterDate);
 
 		List<User> users = userService.findAll(filter);
@@ -144,6 +163,36 @@ public class UserServiceTest {
 		assertThat(users, not(empty()));
 	}
 
+	@Test
+	public void givenRightPage_whenFindAll_thenFound() {
+		UserFilterRequest filter = new UserFilterRequest();
+		filter.setPage(1);
+		
+		List<User> users = userService.findAll(filter);
+		
+		assertThat(users, not(empty()));
+	}
+	
+	@Test
+	public void givenWrongPage_whenFindAll_thenNotFound() {
+		UserFilterRequest filter = new UserFilterRequest();
+		filter.setPage(100);
+		
+		List<User> users = userService.findAll(filter);
+		
+		assertThat(users, is(empty()));
+	}
+	
+	@Test
+	public void givenLimit_whenFindAll_thenFound() {
+		UserFilterRequest filter = new UserFilterRequest();
+		filter.setLimit(1);
+		
+		List<User> characterises = userService.findAll(filter);
+		
+		assertThat(characterises.size(), equalTo(1));
+	}
+	
 	@Test
 	public void givenExistId_whenFindById_thenFound() {
 		User foundUser = userService.findById(user.getId());

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.realife.services.common.util.DateUtil;
+import com.realife.services.common.util.DateUtils;
 import com.realife.services.domains.Characterise;
 import com.realife.services.models.characterises.CharacteriseFilterRequest;
 import com.realife.services.repositories.CharacteriseRepository;
@@ -56,16 +56,16 @@ public class CharacteriseServiceImpl extends BaseServiceImpl<Characterise> imple
 	
 	@Override
 	public Characterise findByName(Long userId, String name) {
-		return characteriseRepository.findByName(userId, name);
+		return characteriseRepository.findByUserIdAndName(userId, name);
 	}
 
 	@Override
 	public Characterise save(Characterise characterise) {
 
 		if (characterise.getId() == null) {
-			characterise.setCreatedAt(DateUtil.getUtcNow());
+			characterise.setCreatedAt(DateUtils.getUtcNow());
 		} else {
-			characterise.setUpdatedAt(DateUtil.getUtcNow());
+			characterise.setUpdatedAt(DateUtils.getUtcNow());
 		}
 
 		return characteriseRepository.save(characterise);

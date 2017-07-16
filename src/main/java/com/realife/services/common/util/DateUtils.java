@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class DateUtil {
+public class DateUtils {
 
 	public static Date getUtcNow() {
 		ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);

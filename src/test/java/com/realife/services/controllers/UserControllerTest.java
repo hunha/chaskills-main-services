@@ -45,7 +45,7 @@ public class UserControllerTest {
 	public void init() {
 		if (user == null) {
 			user = new User();
-			user.setEmail("hungtest" + Math.random() + "@gmail.com");
+			user.setEmail("user_controller_test" + Math.random() + "@gmail.com");
 			user.setFirstName("Hung");
 			user.setLastName("Nguyen");
 			user.setPasswordDigest("123456");
@@ -54,7 +54,7 @@ public class UserControllerTest {
 
 		if (userRequest == null) {
 			userRequest = new UserRequest();
-			userRequest.setEmail("hungtest" + Math.random() + "@gmail.com");
+			userRequest.setEmail("user_controller_request_test" + Math.random() + "@gmail.com");
 			userRequest.setFirstName("Hung 2");
 			userRequest.setLastName("Meo");
 			userRequest.setPassword("12346");

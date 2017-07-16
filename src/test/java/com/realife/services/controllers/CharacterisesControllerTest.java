@@ -46,7 +46,7 @@ public class CharacterisesControllerTest {
 	public void init() {
 		if (user == null) {
 			user = new User();
-			user.setEmail("hungtest" + Math.random() + "@gmail.com");
+			user.setEmail("characterise_controller_test" + Math.random() + "@gmail.com");
 			user.setFirstName("Hung");
 			user.setLastName("Nguyen");
 			user.setPasswordDigest("123456");
@@ -57,7 +57,7 @@ public class CharacterisesControllerTest {
 			characterise = new Characterise();
 			characterise.setId(null);
 			characterise.setUserId(user.getId());
-			characterise.setName("Skill" + Math.random());
+			characterise.setName("Skill Controller" + Math.random());
 			characterise.setLevel(Characterise.DEFAULT_LEVEL);
 			characterise.setPoints(Characterise.DEFAULT_POINTS);
 			characteriseService.save(characterise);
@@ -66,6 +66,11 @@ public class CharacterisesControllerTest {
 
 	@After
 	public void dispose() {
+		if (user != null) {
+			userService.delete(user.getId());
+			user = null;
+		}
+		
 		if (characterise != null) {
 			characteriseService.delete(characterise.getId());
 			characterise = null;

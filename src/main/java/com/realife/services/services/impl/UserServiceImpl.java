@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.realife.services.common.util.DateUtil;
+import com.realife.services.common.util.DateUtils;
 import com.realife.services.domains.User;
 import com.realife.services.models.users.UserFilterRequest;
 import com.realife.services.repositories.UserRepository;
@@ -72,9 +72,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public User save(User user) {
 		if (user.getId() == null) {
-			user.setCreatedAt(DateUtil.getUtcNow());
+			user.setCreatedAt(DateUtils.getUtcNow());
 		} else {
-			user.setUpdatedAt(DateUtil.getUtcNow());
+			user.setUpdatedAt(DateUtils.getUtcNow());
 		}
 
 		return userRepository.save(user);

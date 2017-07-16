@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
 
-import com.realife.services.common.util.DateUtil;
+import com.realife.services.common.util.DateUtils;
 import com.realife.services.models.users.UserResponse;
 
 public class UserTest {
@@ -35,7 +35,7 @@ public class UserTest {
 		user.setFirstName("Hung");
 		user.setLastName("Nguyen");
 		user.setPasswordDigest("123456");
-		user.setCreatedAt(DateUtil.getUtcNow());
+		user.setCreatedAt(DateUtils.getUtcNow());
 	}
 	
 	@Test
