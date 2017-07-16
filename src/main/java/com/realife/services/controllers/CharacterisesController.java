@@ -1,5 +1,8 @@
 package com.realife.services.controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -83,10 +86,8 @@ public class CharacterisesController extends BaseController {
 			throw new NotFoundException();
 
 		Characterise characterise = characteriseService.findByName(user.getId(), model.getName());
-		if (characterise != null) {
-			result.addError(new ObjectError("name", "is existed"));
-			throw new InvalidFormException(result);
-		}
+		if (characterise != null)
+			throwInvalidFormException("name", "is existed");
 
 		characterise = modelMapper.map(model, Characterise.class);
 		characterise.setId(null);

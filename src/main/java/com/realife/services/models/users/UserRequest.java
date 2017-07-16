@@ -1,8 +1,7 @@
 package com.realife.services.models.users;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.realife.services.models.BaseRequest;
 
@@ -13,18 +12,18 @@ import lombok.Setter;
 @Setter
 public class UserRequest extends BaseRequest {
 
-	@NotNull
+	@NotBlank
 	@Length(max = 50)
 	private String firstName;
 	
 	@Length(max = 50)
 	private String lastName;
 	
-	@NotNull
+	@NotBlank
 	@Length(max = 255)
 	private String email;
 	
-	@NotNull
+	@NotBlank
 	@Length(max = 255)
 	private String password;
 	

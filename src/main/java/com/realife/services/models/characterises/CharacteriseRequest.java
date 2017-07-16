@@ -18,7 +18,7 @@ public class CharacteriseRequest extends BaseRequest {
 	private Long userId;
 	
 	@NotBlank
-	@Length(max = 256)
+	@Length(max = 255)
 	private String name;
 	
 	@Length(max = 512)

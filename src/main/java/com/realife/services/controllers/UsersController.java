@@ -68,7 +68,7 @@ public class UsersController extends BaseController {
 
 		User user = userService.findByEmail(model.getEmail());
 		if (user != null)
-			throw new ForbiddenException("email is existed.");
+			throwInvalidFormException("email", "is existed");
 
 		user = modelMapper.map(model, User.class);
 		user.setId(null);
