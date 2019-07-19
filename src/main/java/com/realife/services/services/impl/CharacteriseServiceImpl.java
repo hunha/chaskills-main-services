@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,6 @@ import com.realife.services.repositories.specs.SearchOperation;
 import com.realife.services.repositories.specs.SearchSpecificationBuilder;
 import com.realife.services.services.CharacteriseService;
 
-import lombok.val;
-
 @Service
 public class CharacteriseServiceImpl extends BaseServiceImpl<Characterise> implements CharacteriseService {
 
@@ -27,14 +26,14 @@ public class CharacteriseServiceImpl extends BaseServiceImpl<Characterise> imple
 	@SuppressWarnings("unchecked")
 	public List<Characterise> findAll(CharacteriseFilterRequest filter) {
 
-		val spec = buildCharacteriseSpec(filter);
-		val pageRequest = buildPageRequest(filter);
+		Specification<Characterise> spec = buildCharacteriseSpec(filter);
+		PageRequest pageRequest = buildPageRequest(filter);
 		Page<Characterise> characterises = characteriseRepository.findAll(spec, pageRequest);
 		return characterises.getContent();
 	}
 
 	private Specification<Characterise> buildCharacteriseSpec(CharacteriseFilterRequest filter) {
-		val specBuilder = new SearchSpecificationBuilder<Characterise>();
+		SearchSpecificationBuilder<Characterise> specBuilder = new SearchSpecificationBuilder<Characterise>();
 		if (filter.getUserId() != null) {
 			specBuilder.with("userId", SearchOperation.EqualOrLike, filter.getUserId());
 		}

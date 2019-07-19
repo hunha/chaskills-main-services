@@ -1,10 +1,5 @@
 package com.realife.services.models;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class ErrorResponse extends BaseResponse {
 
 	private Object errors;
@@ -14,6 +9,14 @@ public class ErrorResponse extends BaseResponse {
 	}
 
 	public ErrorResponse(Object errors) {
+		this.errors = errors;
+	}
+
+	public Object getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Object errors) {
 		this.errors = errors;
 	}
 }

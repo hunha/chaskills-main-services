@@ -14,8 +14,6 @@ import com.realife.services.exceptions.InvalidFormException;
 import com.realife.services.exceptions.ResponseException;
 import com.realife.services.models.ErrorResponse;
 
-import lombok.val;
-
 public class BaseController {
 
 	@Autowired
@@ -31,7 +29,7 @@ public class BaseController {
 	}
 
 	protected void throwInvalidFormException(String field, String message) {
-		val errors = new HashMap<String, List<String>>();
+		HashMap<String, List<String>> errors = new HashMap<String, List<String>>();
 		errors.put(field, new ArrayList<String>(Arrays.asList(message)));
 		throw new InvalidFormException(errors);
 	}

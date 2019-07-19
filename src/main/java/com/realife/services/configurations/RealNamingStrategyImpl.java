@@ -18,6 +18,7 @@ public class RealNamingStrategyImpl extends SpringPhysicalNamingStrategy {
 		if (name == null) {
 			return null;
 		}
+		
 		StringBuilder builder = new StringBuilder(name.getText().replace('.', '_'));
 		for (int i = 1; i < builder.length() - 1; i++) {
 			if (isUnderscoreRequired(builder.charAt(i - 1), builder.charAt(i), builder.charAt(i + 1))) {

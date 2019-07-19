@@ -1,8 +1,5 @@
 package com.realife.services.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -11,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +29,6 @@ import com.realife.services.models.characterises.CharacterisesResponse;
 import com.realife.services.services.CharacteriseService;
 import com.realife.services.services.UserService;
 
-import lombok.val;
-
 @RestController
 @RequestMapping("/characterises")
 public class CharacterisesController extends BaseController {
@@ -49,8 +43,8 @@ public class CharacterisesController extends BaseController {
 	@HystrixCommand(groupKey = "characterises", commandKey = "characterises.filter")
 	public CharacterisesResponse filter(CharacteriseFilterRequest filter) {
 
-		val response = new CharacterisesResponse();
-
+		CharacterisesResponse response = new CharacterisesResponse();
+		
 		List<Characterise> characterises = characteriseService.findAll(filter);
 		for (Characterise characterise : characterises) {
 			CharacteriseResponse characteriseResponse = modelMapper.map(characterise, CharacteriseResponse.class);
@@ -64,7 +58,7 @@ public class CharacterisesController extends BaseController {
 	@HystrixCommand(groupKey = "characterises", commandKey = "characterises.get_by_id")
 	public CharacteriseResponse getById(@PathVariable("id") Long id) {
 
-		val characterise = characteriseService.findById(id);
+		Characterise characterise = characteriseService.findById(id);
 		if (characterise == null)
 			throw new NotFoundException();
 
