@@ -22,8 +22,6 @@ import com.realife.services.exceptions.*;
 import com.realife.services.models.users.*;
 import com.realife.services.services.UserService;
 
-import lombok.val;
-
 @RestController
 @RequestMapping("/users")
 public class UsersController extends BaseController {
@@ -35,7 +33,7 @@ public class UsersController extends BaseController {
 	@HystrixCommand(groupKey = "users", commandKey = "users.filter")
 	public UsersResponse filter(UserFilterRequest filter) {
 
-		val response = new UsersResponse();
+		UsersResponse response = new UsersResponse();
 
 		List<User> users = userService.findAll(filter);
 		for (User user : users) {
@@ -50,7 +48,7 @@ public class UsersController extends BaseController {
 	@HystrixCommand(groupKey = "users", commandKey = "users.get_by_id")
 	public UserResponse getById(@PathVariable("id") Long id) {
 
-		val user = userService.findById(id);
+		User user = userService.findById(id);
 		if (user == null)
 			throw new NotFoundException();
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,6 @@ import com.realife.services.repositories.specs.SearchOperation;
 import com.realife.services.repositories.specs.SearchSpecificationBuilder;
 import com.realife.services.services.UserService;
 
-import lombok.val;
-
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
@@ -28,14 +27,14 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@SuppressWarnings({ "unchecked" })
 	public List<User> findAll(UserFilterRequest filter) {
 
-		val spec = buildUserSpec(filter);
-		val pageRequest = buildPageRequest(filter);
+		Specification<User> spec = buildUserSpec(filter);
+		PageRequest pageRequest = buildPageRequest(filter);
 		Page<User> users = userRepository.findAll(spec, pageRequest);
 		return users.getContent();
 	}
 
 	private Specification<User> buildUserSpec(UserFilterRequest filter) {
-		val specBuilder = new SearchSpecificationBuilder<User>();
+		SearchSpecificationBuilder<User> specBuilder = new SearchSpecificationBuilder<User>();
 		if (!StringUtils.isBlank(filter.getFirstName())) {
 			specBuilder.with("firstName", SearchOperation.EqualOrLike, filter.getFirstName());
 		}

@@ -1,8 +1,6 @@
 package com.realife.services.models;
 
-import lombok.Getter;
 
-@Getter
 public class PagingFilterRequest extends FilterRequest {
 
 	public static int DEFAULT_PAGE = 1;
@@ -26,5 +24,13 @@ public class PagingFilterRequest extends FilterRequest {
 			limit = MAX_LIMIT;
 
 		this.limit = limit;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public int getLimit() {
+		return limit;
 	}
 }
